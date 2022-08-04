@@ -1,28 +1,24 @@
 name: "Analyze"
 on:
   workflow_dispatch:
-  #push:
-    #branches: main
-    #paths-ignore:
-      #- README.md
-      #- .github/wworkflows/release.yml
-  #pull_request:
+  push:
+    branches: main
+    paths-ignore:
+      - README.md
+  pull_request:
 env:
     GH_TOKEN: ${{ secrets.TOK }}
-
 jobs:
   Analyze:
     runs-on: eclairit-1
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Analyze
       run: |
         set -e
         cd ECLAIR
-        echo $GITHUB_REF_NAME
         gh_ref=$(echo $GITHUB_REF_NAME | sed 's@/@@')
-        echo $gh_ref
         # Prepare for build
         ../prepare.sh Debug
         # Analyze the project
@@ -36,17 +32,17 @@ jobs:
         anybadge --label=ECLAIR --value=default --file=badge.svg
         cp gh-quality-report.sarif out/
         cp badge.svg out/
-    
+
     - name: reports SARIF
       run: |
-        ris=$(gzip -c ECLAIR/gh-quality-report.sarif | base64 -w0)
-        gh api --method POST -H "Accept: application/vnd.github+json" /repos/tonasodji/eclair_demo/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif=$ris
+        gh-report=$(gzip -c ECLAIR/gh-quality-report.sarif | base64 -w0)
+        gh api --method POST -H "Accept: application/vnd.github+json" /repos/tonasodji/eclair_demo/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif=$gh-report
     - name: Upload Artifact
-      uses: actions/upload-artifact@master
+      uses: actions/upload-artifact@v3
       with:
         name: artifacts
         path: ECLAIR/out
-       
+
   download:
     needs: Analyze
     runs-on: ubuntu-latest
