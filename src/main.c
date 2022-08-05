@@ -26,6 +26,7 @@
 #    define HEX_FORMAT  "0x%04X"
 #endif
 
+//
 int
 main (int argc, char *argv[])
 {
