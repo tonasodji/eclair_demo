@@ -2,4 +2,3 @@
 
 ![example workflow](https://github.com/tonasodji/eclair_demo/actions/workflows/github-CI.yml/badge.svg)
 
-[![Analyze](https://github.com/tonasodji/eclair_demo/actions/workflows/github-CI.yml/badge.svg)](https://github.com/tonasodji/eclair_demo/actions/workflows/github-CI.yml)
