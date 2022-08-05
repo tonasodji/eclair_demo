@@ -7,7 +7,7 @@ on:
       - README.md
   pull_request:
 env:
-    GH_TOKEN: ${{ secrets.TOK }}
+    GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   Analyze:
     runs-on: eclairit-1
@@ -38,9 +38,15 @@ jobs:
     - name: Upload Artifact
       uses: actions/upload-artifact@v3
       with:
-        name: artifacts
+        name: artifacts1
         path: ECLAIR/out
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifacts2
+        path: ECLAIR/gh-quality-report.sarif
     - name: reports SARIF
       run: |
         (gzip -c ECLAIR/gh-quality-report.sarif | base64 -w0) > results
-        gh api --method POST -H "Accept: application/vnd.github+json" /repos/$GITHUB_REPOSITORY/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif=results
+        gh api --method POST -H "Accept: application/vnd.github+json" /repos/$GITHUB_REPOSITORY/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f --silent sarif=results
