@@ -18,13 +18,15 @@ jobs:
       run: |
         set -e
         cd ECLAIR
-        gh_ref=$(echo $GITHUB_REF_NAME | sed 's@/@@')
+        gh_ref=$(echo $GITHUB_REF_NAME | sed 's,/,_,')
         # Prepare for build
         ../prepare.sh Debug
         # Analyze the project
         ./analyze.sh
         # Make the directory for ECLAIR project database
-        mkdir -p ~/github/$GITHUB_REPOSITORY/$GITHUB_RUN_NUMBER && rm -f ~/github/$GITHUB_REPOSITORY/last_$gh_ref && ln -s ~/github/$GITHUB_REPOSITORY/$GITHUB_RUN_NUMBER ~/github/$GITHUB_REPOSITORY/last_$gh_ref
+        mkdir -p ~/github/$GITHUB_REPOSITORY/$GITHUB_RUN_NUMBER
+        rm -f ~/github/$GITHUB_REPOSITORY/last_$gh_ref
+        ln -s ~/github/$GITHUB_REPOSITORY/$GITHUB_RUN_NUMBER ~/github/$GITHUB_REPOSITORY/last_$gh_ref
         # Copy the project database
         scp out/PROJECT.ecd ~/github/$GITHUB_REPOSITORY/$GITHUB_RUN_NUMBER
         # Publish ECLAIR report link
@@ -49,9 +51,9 @@ jobs:
       run: ls -R
     - name: reports SARIF
       run: |
-        ris=$(gzip -c artifacts/gh-quality-report.sarif | base64 -w0)
-        gh api --method POST -H "Accept: application/vnd.github+json" /repos/tonasodji/eclair_demo/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif=$ris
-        
+        gzip -c artifacts/gh-quality-report.sarif | base64 -w0 > results.sarif
+        gh api --method POST -H "Accept: application/vnd.github+json" /repos/$GITHUB_REPOSITORY/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif=results.sarif
+
     - uses: eine/tip@master
       with:
         token: ${{ secrets.TOK }}
