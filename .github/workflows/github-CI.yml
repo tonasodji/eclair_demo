@@ -40,6 +40,11 @@ jobs:
       with:
         name: artifacts
         path: ECLAIR/out
+    - name: reports SARIF
+      run: |
+        gzip -c ECLAIR/gh-quality-report.sarif | base64 -w0 > results.sarif
+        gh api --method POST -H "Accept: application/vnd.github+json" /repos/$GITHUB_REPOSITORY/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif results.sarif
+
 
   download:
     needs: Analyze
@@ -49,10 +54,6 @@ jobs:
       uses: actions/download-artifact@v2
     - name: Display
       run: ls -R
-    - name: reports SARIF
-      run: |
-        gzip -c artifacts/gh-quality-report.sarif | base64 -w0 > results.sarif
-        gh api --method POST -H "Accept: application/vnd.github+json" /repos/$GITHUB_REPOSITORY/code-scanning/sarifs -f commit_sha=$GITHUB_SHA -f ref=$GITHUB_REF -f sarif results.sarif
 
     - uses: eine/tip@master
       with:
