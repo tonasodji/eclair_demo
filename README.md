@@ -3,6 +3,7 @@
 ![example workflow](https://github.com/tonasodji/eclair_demo/actions/workflows/github-CI.yml/badge.svg)
 
 <!-- [START BADGES] -->
+<!-- Please keep comment here to allow auto update -->
 
 <!-- [END BADGES] -->
 
