@@ -6,5 +6,6 @@
 
 <!-- [START BADGES] -->
 <!-- Please keep comment here to allow auto update -->
-
+[![Project badge](https://img.shields.io/badge/ECLAIR-passing-brightgreen)](https://eclairit.com:3787/fs/home/emelin/github/tonasodji/eclair_demo/last_main/PROJECT.ecd)
+[![Language](https://img.shields.io/badge/language-TypeScript-blue.svg?style=flat-square)](https://www.typescriptlang.org)
 <!-- [END BADGES] -->
