@@ -10,7 +10,7 @@ env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   Analyze:
-    runs-on: eclairit
+    runs-on: self-hosted
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
