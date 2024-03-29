@@ -1,11 +1,11 @@
 name: "Analyze"
 on:
   workflow_dispatch:
-  push:
-    paths-ignore:
-      - README.md
+  #push:
+    #paths-ignore:
+      #- README.md
       #- .github/workflows/**
-  pull_request:
+  #pull_request:
 env:
     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
